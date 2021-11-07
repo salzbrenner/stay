@@ -2,7 +2,7 @@ import { ObjectId } from "bson";
 import { IResolvers } from "graphql-tools";
 import { Database, Listing } from "../../../lib/types";
 
-export const resolvers: IResolvers = {
+export const listingsResolvers: IResolvers = {
   Query: {
     listings: async (
       _root: undefined,
