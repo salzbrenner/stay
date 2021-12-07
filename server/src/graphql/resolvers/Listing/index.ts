@@ -8,7 +8,9 @@ export const listingsResolvers: IResolvers = {
       _root: undefined,
       _args: Record<string, never>,
       { db }: { db: Database } // check index.ts where context is set
-    ): Promise<Listing[]> => await db.listings.find({}).toArray(),
+    ): Promise<Listing[]> => {
+      return await db.listings.find({}).toArray();
+    },
   },
   Mutation: {
     deleteListing: async (
