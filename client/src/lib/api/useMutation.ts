@@ -1,5 +1,6 @@
-import { useEffect, useCallback, useReducer } from "react";
+import { useReducer } from "react";
 import { server } from "./server";
+
 interface State<TData> {
   data: TData | null;
   loading: boolean;
@@ -11,9 +12,10 @@ type Action<TData> =
   | { type: "FETCH_SUCCESS"; payload: TData }
   | { type: "FETCH_ERROR" };
 
-interface QueryResult<TData> extends State<TData> {
-  refetch: () => void;
-}
+type MutationTuple<TData, TVariables> = [
+  (variables?: TVariables | undefined) => Promise<void>,
+  State<TData>
+];
 
 const reducer =
   <TData>() =>
@@ -30,8 +32,9 @@ const reducer =
     }
   };
 
-export const useQuery = <TData = any>(query: string): QueryResult<TData> => {
-  // do this for type checking
+export const useMutation = <TData = any, TVariables = any>(
+  query: string
+): MutationTuple<TData, TVariables> => {
   const fetchReducer = reducer<TData>();
   const [state, dispatch] = useReducer(fetchReducer, {
     data: null,
@@ -39,27 +42,25 @@ export const useQuery = <TData = any>(query: string): QueryResult<TData> => {
     error: false,
   });
 
-  const fetch = useCallback(() => {
-    const fetchApi = async () => {
-      try {
-        dispatch({ type: "FETCH" });
-        const { data, errors } = await server.fetch<TData>({ query });
-        if (errors && errors.length) {
-          throw new Error(errors[0].message);
-        }
-        dispatch({ type: "FETCH_SUCCESS", payload: data });
-      } catch (e) {
-        dispatch({ type: "FETCH_ERROR" });
+  const fetch = async (variables?: TVariables) => {
+    try {
+      dispatch({ type: "FETCH" });
 
-        throw console.error(e);
+      const { data, errors } = await server.fetch<TData, TVariables>({
+        query,
+        variables,
+      });
+
+      if (errors && errors.length) {
+        throw new Error(errors[0].message);
       }
-    };
-    fetchApi();
-  }, [query]);
+      dispatch({ type: "FETCH_SUCCESS", payload: data });
+    } catch (error) {
+      dispatch({ type: "FETCH_ERROR" });
 
-  useEffect(() => {
-    fetch();
-  }, [fetch]);
+      throw console.error(error);
+    }
+  };
 
-  return { ...state, refetch: fetch };
+  return [fetch, state];
 };
