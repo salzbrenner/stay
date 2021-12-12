@@ -1,11 +1,20 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import reportWebVitals from "./reportWebVitals";
+import ApolloClient from "apollo-boost";
+import { ApolloProvider } from "react-apollo";
 import { Listings } from "./sections";
+import "./styles/index.css";
+
+const client = new ApolloClient({
+  uri: "/api", // can set instead of localhost:9000/api b/c of proxy in package.json
+});
 
 ReactDOM.render(
   <React.StrictMode>
-    <Listings title="My house listings" />
+    <ApolloProvider client={client}>
+      <Listings title="My house listings" />
+    </ApolloProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
