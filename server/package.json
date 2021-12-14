@@ -1,5 +1,5 @@
 {
-  "name": "myhouse-v1-server",
+  "name": "stay-server",
   "version": "0.1.0",
   "dependencies": {
     "apollo-server-express": "^3.4.0",
