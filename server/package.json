@@ -4,6 +4,7 @@
   "dependencies": {
     "apollo-server-express": "^3.4.0",
     "express": "^4.17.1",
+    "googleapis": "^92.0.0",
     "graphql": "^16.0.1",
     "graphql-tools": "^4.0.8",
     "lodash.merge": "^4.6.2",
