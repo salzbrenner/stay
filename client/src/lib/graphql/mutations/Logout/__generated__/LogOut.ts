@@ -7,7 +7,7 @@
 // GraphQL mutation operation: LogOut
 // ====================================================
 
-export interface LogOut_logIn {
+export interface LogOut_logOut {
   __typename: "Viewer";
   id: string | null;
   token: string | null;
@@ -17,5 +17,5 @@ export interface LogOut_logIn {
 }
 
 export interface LogOut {
-  logIn: LogOut_logIn;
+  logOut: LogOut_logOut;
 }

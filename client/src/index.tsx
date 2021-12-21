@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
 import {
+  AppHeader,
   Home,
   Host,
   Listing,
@@ -15,7 +16,7 @@ import {
 } from "./sections";
 import { Viewer } from "./lib/types";
 import "./styles/index.css";
-import { Layout } from "antd";
+import { Affix, Layout } from "antd";
 
 const client = new ApolloClient({
   uri: "/api", // can set instead of localhost:9000/api b/c of proxy in package.json
@@ -31,10 +32,12 @@ const initialViewer: Viewer = {
 
 const App = () => {
   const [viewer, setViewer] = useState<Viewer>(initialViewer);
-  console.log(viewer);
   return (
     <Router>
       <Layout id="app">
+        <Affix offsetTop={0} className="app_affix-header">
+          <AppHeader viewer={viewer} setViewer={setViewer} />
+        </Affix>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/host" element={<Host />} />
@@ -49,11 +52,12 @@ const App = () => {
 };
 
 ReactDOM.render(
-  <React.StrictMode>
-    <ApolloProvider client={client}>
-      <App />
-    </ApolloProvider>
-  </React.StrictMode>,
+  // antd doesn't work with strict mode currently
+  // <React.StrictMode>
+  <ApolloProvider client={client}>
+    <App />
+  </ApolloProvider>,
+  // </React.StrictMode>,
   document.getElementById("root")
 );
 

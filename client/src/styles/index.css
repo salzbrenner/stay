@@ -1,5 +1,10 @@
 @import "~antd/dist/antd.css";
 @import url(https://fonts.googleapis.com/css?family=Sacramento);
+
+.mr-1 {
+  margin-right: 1rem;
+}
+
 .menu {
   width: 100%;
   padding: 0 20px;
@@ -25,6 +30,8 @@
 .app-header__logo {
   display: inline-block;
   padding: 0 20px;
+  font-weight: 800;
+  font-size: 24px;
 }
 .app-header__logo img {
   width: 36px;
@@ -45,7 +52,6 @@
   box-shadow: 0 2px 4px rgba(29, 34, 108, 0.1);
 }
 .app-header__menu-section {
-  float: right;
 }
 .app-header-skeleton {
   display: flex;
