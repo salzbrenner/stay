@@ -23,6 +23,7 @@ export const MenuItems = ({ viewer, setViewer }: Props) => {
     onCompleted: (data) => {
       if (data && data.logOut) {
         setViewer(data.logOut);
+        sessionStorage.removeItem("token");
         displaySuccessNotification("You've successfully logged out!");
       }
     },
@@ -39,7 +40,7 @@ export const MenuItems = ({ viewer, setViewer }: Props) => {
 
   const subMenuLogin =
     viewer.id && viewer.avatar ? (
-      <SubMenu title={<Avatar src={viewer.avatar} />}>
+      <SubMenu key={"sub-menu"} title={<Avatar src={viewer.avatar} />}>
         <Item key="/user">
           <Link to={`/user/${viewer.id}`}>
             <UserOutlined className="mr-1" />
