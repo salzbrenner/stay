@@ -2,7 +2,9 @@
   "name": "stay-server",
   "version": "0.1.0",
   "dependencies": {
+    "@types/cookie-parser": "^1.4.2",
     "apollo-server-express": "^3.4.0",
+    "cookie-parser": "^1.4.6",
     "express": "^4.17.1",
     "googleapis": "^92.0.0",
     "graphql": "^16.0.1",
