@@ -58,12 +58,13 @@ export const userResolvers: IResolvers = {
           _id: { $in: user.bookings },
         });
 
+        data.total = await cursor.count();
+
         // page = 1; limit = 10; cursor starts at 0
         // page = 2; limit = 10; cursor starts at 10
         cursor = cursor.skip(page > 0 ? (page - 1) * limit : 0);
         cursor = cursor.limit(limit);
 
-        data.total = await cursor.count();
         data.result = await cursor.toArray();
 
         return data;
@@ -88,8 +89,6 @@ export const userResolvers: IResolvers = {
 
         data.total = await cursor.count();
 
-        // page = 1; limit = 10; cursor starts at 0
-        // page = 2; limit = 10; cursor starts at 10
         cursor = cursor.skip(page > 0 ? (page - 1) * limit : 0);
         cursor = cursor.limit(limit);
 
