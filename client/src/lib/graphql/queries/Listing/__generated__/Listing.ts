@@ -55,7 +55,7 @@ export interface Listing_listing {
 }
 
 export interface Listing {
-  listing: Listing_listing | null;
+  listing: Listing_listing;
 }
 
 export interface ListingVariables {

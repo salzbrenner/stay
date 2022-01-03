@@ -9,6 +9,8 @@ import {
   Listing as ListingData,
   ListingVariables,
 } from "../../lib/graphql/queries/Listing/__generated__/Listing";
+import { ListingBookings, ListingDetails } from "./components";
+import { mockListingBookings } from "./components/mock";
 
 type MatchParams = {
   id: string;
@@ -48,7 +50,30 @@ export const Listing = () => {
   }
 
   const listing = data ? data.listing : null;
+  // const listingBookings = mockListingBookings;
   const listingBookings = listing ? listing.bookings : null;
 
-  return <h2>Listing</h2>;
+  const listingDetailsElement = listing ? (
+    <ListingDetails listing={listing} />
+  ) : null;
+
+  const listingBookingsElement = listingBookings ? (
+    <ListingBookings
+      listingBookings={listingBookings}
+      bookingsPage={bookingsPage}
+      limit={PAGE_LIMIT}
+      setBookingsPage={setBookingsPage}
+    />
+  ) : null;
+
+  return (
+    <Content className="listings">
+      <Row gutter={24} justify="space-between">
+        <Col xs={24} lg={14}>
+          {listingDetailsElement}
+          {listingBookingsElement}
+        </Col>
+      </Row>
+    </Content>
+  );
 };

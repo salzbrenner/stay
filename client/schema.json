@@ -885,9 +885,13 @@
               }
             ],
             "type": {
-              "kind": "OBJECT",
-              "name": "Listing",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Listing",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
