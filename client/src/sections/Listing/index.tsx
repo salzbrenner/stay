@@ -9,7 +9,12 @@ import {
   Listing as ListingData,
   ListingVariables,
 } from "../../lib/graphql/queries/Listing/__generated__/Listing";
-import { ListingBookings, ListingDetails } from "./components";
+import {
+  ListingBookings,
+  ListingDetails,
+  ListingCreateBooking,
+} from "./components";
+import { Moment } from "moment";
 import { mockListingBookings } from "./components/mock";
 
 type MatchParams = {
@@ -20,6 +25,8 @@ const { Content } = Layout;
 
 export const Listing = () => {
   const [bookingsPage, setBookingsPage] = useState(1);
+  const [checkInDate, setCheckInDate] = useState<Moment | null>(null);
+  const [checkOutDate, setCheckOutDate] = useState<Moment | null>(null);
   let { id } = useParams<MatchParams>();
 
   const { loading, data, error } = useQuery<ListingData, ListingVariables>(
@@ -66,12 +73,26 @@ export const Listing = () => {
     />
   ) : null;
 
+  const listingCreateBookingElement = listing ? (
+    <ListingCreateBooking
+      price={listing.price}
+      checkInDate={checkInDate}
+      checkOutDate={checkOutDate}
+      setCheckInDate={setCheckInDate}
+      setCheckOutDate={setCheckOutDate}
+    />
+  ) : null;
+
   return (
     <Content className="listings">
       <Row gutter={24} justify="space-between">
         <Col xs={24} lg={14}>
           {listingDetailsElement}
           {listingBookingsElement}
+        </Col>
+
+        <Col xs={24} lg={10}>
+          {listingCreateBookingElement}
         </Col>
       </Row>
     </Content>
