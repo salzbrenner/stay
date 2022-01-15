@@ -3,7 +3,13 @@ import { IResolvers } from "graphql-tools";
 import { ObjectId } from "mongodb";
 import { Listing, Database } from "../../../lib/types";
 import { authorize } from "../../../lib/utils";
-import { ListingArgs, ListingBookingsArgs, ListingBookingsData } from "./type";
+import {
+  ListingArgs,
+  ListingBookingsArgs,
+  ListingBookingsData,
+  ListingsData,
+  ListingsFilter,
+} from "./type";
 
 export const listingResolvers: IResolvers = {
   Query: {
@@ -27,6 +33,43 @@ export const listingResolvers: IResolvers = {
         return listing;
       } catch (error) {
         throw new Error(`Failed to query listing: ${error}`);
+      }
+    },
+    listings: async (
+      _root: undefined,
+      { filter, limit, page }: ListingArgs,
+      { db }: { db: Database }
+    ): Promise<ListingsData> => {
+      try {
+        const data: ListingsData = {
+          total: 0,
+          result: [],
+        };
+
+        // get all listings
+        let cursor = await db.listings.find({});
+
+        if (filter && filter === ListingsFilter.PRICE_LOW_TO_HIGH) {
+          cursor = cursor.sort({
+            // ascending 1 for mongoDB
+            price: 1,
+          });
+        } else if (filter && filter === ListingsFilter.PRICE_HIGH_TO_LOW) {
+          cursor = cursor.sort({
+            price: -1,
+          });
+        }
+
+        data.total = await cursor.count();
+
+        cursor = cursor.skip(page > 0 ? (page - 1) * limit : 0);
+        cursor = cursor.limit(limit);
+
+        data.result = await cursor.toArray();
+
+        return data;
+      } catch (error) {
+        throw new Error(`Failed to query listings: ${error}`);
       }
     },
   },

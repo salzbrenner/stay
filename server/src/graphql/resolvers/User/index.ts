@@ -83,6 +83,7 @@ export const userResolvers: IResolvers = {
           result: [],
         };
 
+        // get all listings for this user
         let cursor = await db.listings.find({
           _id: { $in: user.listings },
         });

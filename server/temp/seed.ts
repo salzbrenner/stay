@@ -407,7 +407,7 @@ const listings: Listing[] = [
     description:
       "Stunning luxury home with a private garden by the pool, spacious outdoors, and en suite master bedroom. Located in the hub of central Los Angeles.",
     image:
-      "https://res.cloudinary.com/tiny-house/image/upload/v1560645376/mock/Los%20Angeles/los-angeles-listing-7_qapmfv.jpg",
+      "https://res.cloudinary.com/dumyimamf/image/upload/v1642256061/stay-mock/Los%20Angeles/los-angeles-listing-7_qapmfv_tuio6y.jpg",
     host: "5d378db94e84753160e08b59",
     type: ListingType.House,
     address: "301 Hillhaven Dr, Los Angeles, California",
