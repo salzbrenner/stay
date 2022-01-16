@@ -1,6 +1,7 @@
 import { Request } from "express";
 import { IResolvers } from "graphql-tools";
 import { ObjectId } from "mongodb";
+import { Google } from "../../../lib/api";
 import { Listing, Database } from "../../../lib/types";
 import { authorize } from "../../../lib/utils";
 import {
@@ -9,6 +10,7 @@ import {
   ListingBookingsData,
   ListingsData,
   ListingsFilter,
+  ListingsQuery,
 } from "./type";
 
 export const listingResolvers: IResolvers = {
@@ -37,17 +39,36 @@ export const listingResolvers: IResolvers = {
     },
     listings: async (
       _root: undefined,
-      { filter, limit, page }: ListingArgs,
+      { location, filter, limit, page }: ListingArgs,
       { db }: { db: Database }
     ): Promise<ListingsData> => {
       try {
+        const query: ListingsQuery = {};
+
         const data: ListingsData = {
           total: 0,
           result: [],
+          region: null,
         };
 
+        if (location) {
+          const { country, admin, city } = await Google.geocode(location);
+
+          if (city) query.city = city;
+          if (admin) query.admin = admin;
+          if (country) {
+            query.country = country;
+          } else {
+            throw new Error("no country found");
+          }
+
+          const cityText = city ? `${city}, ` : "";
+          const adminText = admin ? `${admin}, ` : "";
+          data.region = `${cityText}${adminText}${country}`;
+        }
+
         // get all listings
-        let cursor = await db.listings.find({});
+        let cursor = await db.listings.find(query);
 
         if (filter && filter === ListingsFilter.PRICE_LOW_TO_HIGH) {
           cursor = cursor.sort({
@@ -69,6 +90,7 @@ export const listingResolvers: IResolvers = {
 
         return data;
       } catch (error) {
+        console.log(error);
         throw new Error(`Failed to query listings: ${error}`);
       }
     },
