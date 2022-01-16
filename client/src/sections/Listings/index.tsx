@@ -8,7 +8,7 @@ import {
 import { ListingsFilter } from "../../lib/graphql/globalTypes";
 import { useQuery } from "react-apollo";
 import { NavLink, useParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ListingsFilters,
   ListingsPagination,
@@ -28,9 +28,14 @@ export const Listings = () => {
   const [filter, setFilter] = useState(ListingsFilter.PRICE_LOW_TO_HIGH);
   const [page, setPage] = useState(1);
   const { location } = useParams<MatchParams>();
+  const locationRef = useRef(location);
   const { data, loading, error } = useQuery<ListingsData, ListingsVariables>(
     LISTINGS,
     {
+      // when location changes and not on first page
+      // skip updating b/c setPage in useEffect will call
+      // the query again
+      skip: locationRef.current !== location && page !== 1,
       variables: {
         location,
         filter,
@@ -39,6 +44,11 @@ export const Listings = () => {
       },
     }
   );
+
+  useEffect(() => {
+    // if location changes, reset to first page
+    setPage(1);
+  }, [location]);
 
   if (loading) {
     return (
