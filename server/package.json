@@ -6,6 +6,7 @@
     "@types/cookie-parser": "^1.4.2",
     "@types/google__maps": "^0.5.16",
     "apollo-server-express": "^3.4.0",
+    "cloudinary": "^1.28.1",
     "cookie-parser": "^1.4.6",
     "express": "^4.17.1",
     "googleapis": "^92.0.0",
