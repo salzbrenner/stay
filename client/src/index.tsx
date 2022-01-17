@@ -12,6 +12,7 @@ import {
   Listings,
   Login,
   NotFound,
+  Stripe,
   User,
 } from "./sections";
 import { LOG_IN } from "./lib/graphql";
@@ -96,6 +97,10 @@ const App = () => {
           <Route path="/listings/:location" element={<Listings />} />
           <Route path="/login" element={<Login setViewer={setViewer} />} />
           <Route path="/user/:id" element={<User viewer={viewer} />} />
+          <Route
+            path="/stripe"
+            element={<Stripe viewer={viewer} setViewer={setViewer} />}
+          />
           <Route element={<NotFound />} />
         </Routes>
       </Layout>
