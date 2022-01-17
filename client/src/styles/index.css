@@ -279,6 +279,10 @@
   margin-bottom: 5px;
 }
 
+.host__form-image-upload {
+  overflow: hidden;
+}
+
 .host__form-image-upload img {
   width: 125px;
 }
