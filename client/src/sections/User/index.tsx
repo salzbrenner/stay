@@ -17,12 +17,13 @@ type RouteParams = {
 
 interface Props {
   viewer: Viewer;
+  setViewer: (viewer: Viewer) => void;
 }
 
 const { Content } = Layout;
 const PAGE_LIMIT = 4;
 
-export const User = ({ viewer }: Props) => {
+export const User = ({ viewer, setViewer }: Props) => {
   const [params] = useSearchParams();
   const [listingsPage, setListingsPage] = useState(1);
   const [bookingsPage, setBookingsPage] = useState(1);
@@ -32,14 +33,21 @@ export const User = ({ viewer }: Props) => {
   // but ALSO makes query when any variables are updated
   // in this case, listingsPage or bookingsPage
   // are set from state (clicks) and so the query is run again
-  const { data, loading, error } = useQuery<UserData, UserVariables>(USER, {
-    variables: {
-      id: id as string,
-      bookingsPage,
-      listingsPage,
-      limit: PAGE_LIMIT,
-    },
-  });
+  const { data, loading, error, refetch } = useQuery<UserData, UserVariables>(
+    USER,
+    {
+      variables: {
+        id: id as string,
+        bookingsPage,
+        listingsPage,
+        limit: PAGE_LIMIT,
+      },
+    }
+  );
+
+  const handleUserRefetch = async () => {
+    refetch();
+  };
 
   const stripeError = params.get("stripe_error");
   const stripeErrorBanner = stripeError ? (
@@ -69,7 +77,13 @@ export const User = ({ viewer }: Props) => {
   const userBookings = user ? user.bookings : null;
 
   const userProfileElement = user ? (
-    <UserProfile user={user} viewerIsUser={viewerIsUser} />
+    <UserProfile
+      user={user}
+      viewerIsUser={viewerIsUser}
+      viewer={viewer}
+      setViewer={setViewer}
+      handleUserRefetch={handleUserRefetch}
+    />
   ) : null;
 
   const userListingsElement = userListings ? (
