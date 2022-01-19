@@ -69,7 +69,7 @@ export const bookingsResolvers: IResolvers = {
         const { id, source, checkIn, checkOut } = input;
 
         // only a logged in user can make request
-        let viewer = await authorize(db, req);
+        const viewer = await authorize(db, req);
         if (!viewer) {
           throw new Error("viewer cannot be found");
         }
@@ -158,7 +158,7 @@ export const bookingsResolvers: IResolvers = {
         // update bookings field of tenant
         await db.users.updateOne(
           {
-            _id: host._id,
+            _id: viewer._id,
           },
           {
             $push: { bookings: insertedBooking._id },
