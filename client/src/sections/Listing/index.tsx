@@ -16,6 +16,7 @@ import {
 } from "./components";
 import { Moment } from "moment";
 import { mockListingBookings } from "./components/mock";
+import { Viewer } from "../../lib/types";
 
 type MatchParams = {
   id: string;
@@ -23,7 +24,7 @@ type MatchParams = {
 const PAGE_LIMIT = 3;
 const { Content } = Layout;
 
-export const Listing = () => {
+export const Listing = ({ viewer }: { viewer: Viewer }) => {
   const [bookingsPage, setBookingsPage] = useState(1);
   const [checkInDate, setCheckInDate] = useState<Moment | null>(null);
   const [checkOutDate, setCheckOutDate] = useState<Moment | null>(null);
@@ -75,7 +76,10 @@ export const Listing = () => {
 
   const listingCreateBookingElement = listing ? (
     <ListingCreateBooking
+      viewer={viewer}
+      host={listing.host}
       price={listing.price}
+      bookingsIndex={listing.bookingsIndex}
       checkInDate={checkInDate}
       checkOutDate={checkOutDate}
       setCheckInDate={setCheckInDate}
