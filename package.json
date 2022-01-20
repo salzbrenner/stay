@@ -4,7 +4,7 @@
     "build": "cd server && npm run build && cd ../client && npm run build",
     "build:docker": "docker build . -t stay-es-app",
     "push": "heroku container:push web --app=stay-es-app",
-    "release": "heroku container:push web --app=stay-es-app",
+    "release": "heroku container:release web --app=stay-es-app",
     "deploy": "npm run push && npm run release"
   }
 }
