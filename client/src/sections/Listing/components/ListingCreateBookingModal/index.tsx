@@ -6,17 +6,14 @@ import {
   formatListingPrice,
 } from "../../../../lib/utils";
 import { KeyOutlined } from "@ant-design/icons";
-import {
-  CardElement,
-  injectStripe,
-  ReactStripeElements,
-} from "react-stripe-elements";
+import { CardElement } from "@stripe/react-stripe-js";
 import { useMutation } from "react-apollo";
 import {
   CreateBooking as CreateBookingData,
   CreateBookingVariables,
 } from "../../../../lib/graphql/mutations/CreateBooking/__generated__/CreateBooking";
 import { CREATE_BOOKING } from "../../../../lib/graphql";
+import { useStripe, useElements } from "@stripe/react-stripe-js";
 
 interface Props {
   price: number;
@@ -37,13 +34,14 @@ export const ListingCreateBookingModal = ({
   checkInDate,
   checkOutDate,
   id,
-  stripe,
   clearBookingData,
   setModalVisible,
   handleListingRefetch,
-}: Props & ReactStripeElements.InjectedStripeProps) => {
+}: Props) => {
   const daysBooked = checkOutDate.diff(checkInDate, "days") + 1;
   const listingPrice = price * daysBooked;
+  const stripe = useStripe();
+  const elements = useElements();
 
   const [createBooking, { loading }] = useMutation<
     CreateBookingData,
@@ -66,12 +64,13 @@ export const ListingCreateBookingModal = ({
   });
 
   const handleCreateBooking = async () => {
-    if (!stripe) {
+    if (!stripe || !elements) {
       return displayErrorMessage("Sorry, not able to connect with Stripe");
     }
+    const cardElement = elements.getElement(CardElement);
 
-    let { token: stripeToken, error } = await stripe.createToken();
-    console.log(stripeToken);
+    let { token: stripeToken, error } = await stripe.createToken(cardElement!);
+    // console.log(stripeToken);
     if (stripeToken) {
       createBooking({
         variables: {
@@ -137,7 +136,9 @@ export const ListingCreateBookingModal = ({
 
         <div className="listing-booking-modal__stripe-card-section">
           <CardElement
-            hidePostalCode
+            options={{
+              hidePostalCode: true,
+            }}
             className="listing-booking-modal__stripe-card"
           />
           <Text type="secondary">
@@ -162,6 +163,4 @@ export const ListingCreateBookingModal = ({
   );
 };
 
-export const WrappedListingCreateBookingModal = injectStripe(
-  ListingCreateBookingModal
-);
+export const WrappedListingCreateBookingModal = ListingCreateBookingModal;

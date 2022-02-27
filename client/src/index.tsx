@@ -24,7 +24,9 @@ import { Viewer } from "./lib/types";
 import "./styles/index.css";
 import { Affix, Layout, Spin } from "antd";
 import { AppHeaderSkeleton, ErrorBanner } from "./lib/components";
-import { Elements, StripeProvider } from "react-stripe-elements";
+
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 
 const client = new ApolloClient({
   uri: "/api", // can set instead of localhost:9000/api b/c of proxy in package.json
@@ -45,6 +47,10 @@ const initialViewer: Viewer = {
   hasWallet: null,
   didRequest: false,
 };
+
+const stripePromise = loadStripe(
+  process.env.REACT_APP_S_PUBLISHABLE_KEY as string
+);
 
 const App = () => {
   const [viewer, setViewer] = useState<Viewer>(initialViewer);
@@ -84,40 +90,38 @@ const App = () => {
   ) : null;
 
   return (
-    <StripeProvider apiKey={process.env.REACT_APP_S_PUBLISHABLE_KEY as string}>
-      <Router>
-        <Layout id="app">
-          {logInErrorBannerElement}
-          <Affix offsetTop={0} className="app_affix-header">
-            <AppHeader viewer={viewer} setViewer={setViewer} />
-          </Affix>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/host" element={<Host viewer={viewer} />} />
-            <Route
-              path="/listing/:id"
-              element={
-                <Elements>
-                  <Listing viewer={viewer} />
-                </Elements>
-              }
-            />
-            <Route path="/listings" element={<Listings />} />
-            <Route path="/listings/:location" element={<Listings />} />
-            <Route path="/login" element={<Login setViewer={setViewer} />} />
-            <Route
-              path="/user/:id"
-              element={<User viewer={viewer} setViewer={setViewer} />}
-            />
-            <Route
-              path="/stripe"
-              element={<Stripe viewer={viewer} setViewer={setViewer} />}
-            />
-            <Route element={<NotFound />} />
-          </Routes>
-        </Layout>
-      </Router>
-    </StripeProvider>
+    <Router>
+      <Layout id="app">
+        {logInErrorBannerElement}
+        <Affix offsetTop={0} className="app_affix-header">
+          <AppHeader viewer={viewer} setViewer={setViewer} />
+        </Affix>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/host" element={<Host viewer={viewer} />} />
+          <Route
+            path="/listing/:id"
+            element={
+              <Elements stripe={stripePromise}>
+                <Listing viewer={viewer} />
+              </Elements>
+            }
+          />
+          <Route path="/listings" element={<Listings />} />
+          <Route path="/listings/:location" element={<Listings />} />
+          <Route path="/login" element={<Login setViewer={setViewer} />} />
+          <Route
+            path="/user/:id"
+            element={<User viewer={viewer} setViewer={setViewer} />}
+          />
+          <Route
+            path="/stripe"
+            element={<Stripe viewer={viewer} setViewer={setViewer} />}
+          />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Layout>
+    </Router>
   );
 };
 
