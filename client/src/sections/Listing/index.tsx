@@ -18,6 +18,7 @@ import {
 import { Moment } from "moment";
 import { mockListingBookings } from "./components/mock";
 import { Viewer } from "../../lib/types";
+import { useScrollToTop } from "../../lib/hooks";
 
 type MatchParams = {
   id: string;
@@ -26,6 +27,8 @@ const PAGE_LIMIT = 3;
 const { Content } = Layout;
 
 export const Listing = ({ viewer }: { viewer: Viewer }) => {
+  useScrollToTop();
+
   const [bookingsPage, setBookingsPage] = useState(1);
   const [checkInDate, setCheckInDate] = useState<Moment | null>(null);
   const [checkOutDate, setCheckOutDate] = useState<Moment | null>(null);

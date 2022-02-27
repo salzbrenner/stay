@@ -15,6 +15,7 @@ import {
 } from "../../lib/utils";
 import { useEffect, useRef } from "react";
 import { Navigate } from "react-router-dom";
+import { useScrollToTop } from "../../lib/hooks";
 
 interface Props {
   setViewer: (viewer: Viewer) => void;
@@ -23,6 +24,7 @@ const { Content } = Layout;
 const { Text, Title } = Typography;
 
 export const Login = ({ setViewer }: Props) => {
+  useScrollToTop();
   // useQuery from react-apollo runs query on mount
   // but we want to run query manually on specific action, so
   // grab the apollo client with this hook

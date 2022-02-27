@@ -14,11 +14,14 @@ import sanFransiscoImage from "./assets/san-fransisco.jpg";
 import cancunImage from "./assets/cancun.jpg";
 import { useQuery } from "react-apollo";
 import { LISTINGS } from "../../lib/graphql";
+import { useScrollToTop } from "../../lib/hooks";
 
 const { Content } = Layout;
 const { Paragraph, Title } = Typography;
 
 export const Home = () => {
+  useScrollToTop();
+
   const { loading, data } = useQuery<ListingsData, ListingsVariables>(
     LISTINGS,
     {
@@ -27,6 +30,7 @@ export const Home = () => {
         page: 1,
         limit: 4,
       },
+      fetchPolicy: "cache-and-network",
     }
   );
 
