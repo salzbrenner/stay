@@ -6,7 +6,7 @@ import {
   Listings as ListingsData,
 } from "../../lib/graphql/queries/Listings/__generated__/Listings";
 import { ListingsFilter } from "../../lib/graphql/globalTypes";
-import { useQuery } from "react-apollo";
+import { useQuery } from "@apollo/client";
 import { NavLink, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import {

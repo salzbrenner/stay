@@ -7,7 +7,7 @@ import {
 } from "../../../../lib/utils";
 import { KeyOutlined } from "@ant-design/icons";
 import { CardElement } from "@stripe/react-stripe-js";
-import { useMutation } from "react-apollo";
+import { useMutation } from "@apollo/client";
 import {
   CreateBooking as CreateBookingData,
   CreateBookingVariables,

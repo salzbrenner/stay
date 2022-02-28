@@ -1,6 +1,6 @@
 import { Layout, Spin } from "antd";
 import { useEffect, useRef } from "react";
-import { useMutation } from "react-apollo";
+import { useMutation } from "@apollo/client";
 import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { CONNECT_STRIPE } from "../../lib/graphql";
 import {

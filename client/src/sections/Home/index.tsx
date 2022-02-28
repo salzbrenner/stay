@@ -10,9 +10,9 @@ import { Col, Row, Layout, Typography } from "antd";
 import { displayErrorMessage } from "../../lib/utils";
 import { HomeHero, HomeListings, HomeListingsSkeleton } from "./components";
 import mapBackground from "./assets/map-background.jpg";
-import sanFransiscoImage from "./assets/san-fransisco.jpg";
+import sanFranciscoImage from "./assets/san-fransisco.jpg";
 import cancunImage from "./assets/cancun.jpg";
-import { useQuery } from "react-apollo";
+import { useQuery } from "@apollo/client";
 import { LISTINGS } from "../../lib/graphql";
 import { useScrollToTop } from "../../lib/hooks";
 
@@ -108,11 +108,11 @@ export const Home = () => {
         </Title>
         <Row gutter={12}>
           <Col xs={24} sm={12}>
-            <Link to="/listings/san%20fransisco">
+            <Link to="/listings/san%20Francisco">
               <div className="home__listings-img-cover">
                 <img
-                  src={sanFransiscoImage}
-                  alt="San Fransisco"
+                  src={sanFranciscoImage}
+                  alt="San Francisco"
                   className="home__listings-img"
                 />
               </div>

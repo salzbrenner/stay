@@ -1,4 +1,4 @@
-import { useApolloClient, useMutation } from "react-apollo";
+import { useApolloClient, useMutation } from "@apollo/client";
 import { Card, Layout, Typography, Spin } from "antd";
 import { Viewer } from "../../lib/types";
 import { ErrorBanner } from "../../lib/components";
@@ -25,7 +25,7 @@ const { Text, Title } = Typography;
 
 export const Login = ({ setViewer }: Props) => {
   useScrollToTop();
-  // useQuery from react-apollo runs query on mount
+  // useQuery from @apollo/client runs query on mount
   // but we want to run query manually on specific action, so
   // grab the apollo client with this hook
   const client = useApolloClient();

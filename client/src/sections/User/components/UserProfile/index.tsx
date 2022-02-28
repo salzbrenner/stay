@@ -6,7 +6,7 @@ import {
   formatListingPrice,
 } from "../../../../lib/utils";
 import { DisconnectStripe } from "../../../../lib/graphql/mutations/DisconnectStripe/__generated__/DisconnectStripe";
-import { useMutation } from "react-apollo";
+import { useMutation } from "@apollo/client";
 import { DISCONNECT_STRIPE } from "../../../../lib/graphql";
 import { Viewer } from "../../../../lib/types";
 

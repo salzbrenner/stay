@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/client";
 import { Avatar, Button, Menu } from "antd";
 import { UserOutlined, LogoutOutlined, HomeOutlined } from "@ant-design/icons";
 import { LOG_OUT } from "../../../../lib/graphql/mutations";

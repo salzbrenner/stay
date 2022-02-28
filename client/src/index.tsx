@@ -2,8 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import ApolloClient from "apollo-boost";
-import { ApolloProvider, useMutation } from "react-apollo";
+import {
+  ApolloProvider,
+  useMutation,
+  InMemoryCache,
+  ApolloClient,
+  createHttpLink,
+} from "@apollo/client";
 import {
   AppHeader,
   Home,
@@ -27,17 +32,26 @@ import { AppHeaderSkeleton, ErrorBanner } from "./lib/components";
 
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
+import { setContext } from "@apollo/client/link/context";
 
-const client = new ApolloClient({
+const httpLink = createHttpLink({
   uri: "/api", // can set instead of localhost:9000/api b/c of proxy in package.json
-  request: async (operation) => {
-    const token = sessionStorage.getItem("token");
-    operation.setContext({
-      headers: {
-        "X-CSRF-TOKEN": token || "",
-      },
-    });
-  },
+});
+
+const authLink = setContext((_, { headers }) => {
+  // get the authentication token from local storage if it exists
+  const token = localStorage.getItem("token");
+  // return the headers to the context so httpLink can read them
+  return {
+    headers: {
+      ...headers,
+      "X-CSRF-TOKEN": token || "",
+    },
+  };
+});
+const client = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: authLink.concat(httpLink),
 });
 
 const initialViewer: Viewer = {

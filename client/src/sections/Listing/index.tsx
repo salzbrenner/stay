@@ -1,7 +1,7 @@
 import { Col, Layout, Row } from "antd";
 
 import { useState } from "react";
-import { useQuery } from "react-apollo";
+import { useQuery } from "@apollo/client";
 import { useParams } from "react-router";
 import { ErrorBanner, PageSkeleton } from "../../lib/components";
 import { LISTING } from "../../lib/graphql";

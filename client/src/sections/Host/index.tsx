@@ -26,7 +26,7 @@ import {
 import { Viewer } from "../../lib/types";
 // check antd types
 import { UploadRequestOption } from "rc-upload/lib/interface";
-import { useMutation } from "react-apollo";
+import { useMutation } from "@apollo/client";
 import {
   HostListing as HostListingData,
   HostListingVariables,
